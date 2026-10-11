@@ -15,12 +15,9 @@ static void clearScreen(void) {
     printf("\033[2J\033[H");
 }
 
-static void printIndent(int row)
+static void printSpaces(int count)
 {
-    int missingCells = NB_ROWS - rowLength(row);
-    int spaces = missingCells * CELL_WIDTH / 2;
-
-    for (int i = 0; i < spaces; i++)
+    for (int i = 0; i < count; i++)
         printf(" ");
 }
 
@@ -46,8 +43,10 @@ void printBoard(const Hexagon *hex, const bool board[], int highlighted)
         {
             if (i > 0)
                 printf("\n");
-            printIndent(hex->row[i]);
+            printSpaces((hex->q[i] + SIDE - 1) * CELL_WIDTH);
         }
+        else
+            printSpaces(CELL_WIDTH);
         printCell(board[i], i == highlighted);
     }
     printf("\n");

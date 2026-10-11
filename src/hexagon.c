@@ -2,21 +2,17 @@
 #include <stdbool.h>
 #include "hexagon.h"
 
-static int max(int a, int b) { return a > b ? a : b; }
-static int min(int a, int b) { return a < b ? a : b; }
-
-int rowLength(int row)
+static int distanceFromCenter(int q, int r)
 {
-    return NB_ROWS - abs(row - (SIDE - 1));
+    return (abs(q) + abs(r) + abs(q + r)) / 2;
 }
 
 static bool areNeighbors(const Hexagon *hex, int a, int b)
 {
     int dq = hex->q[b] - hex->q[a];
     int dr = hex->r[b] - hex->r[a];
-    int distance = (abs(dq) + abs(dr) + abs(dq + dr)) / 2;
 
-    return distance == 1;
+    return distanceFromCenter(dq, dr) == 1;
 }
 
 static void placeCells(Hexagon *hex)
@@ -24,17 +20,23 @@ static void placeCells(Hexagon *hex)
     int radius = SIDE - 1;
     int i = 0;
 
-    for (int r = -radius; r <= radius; r++)
+    for (int row = 0; row < NB_ROWS; row++)
     {
-        int qMin = max(-radius, -radius - r);
-        int qMax = min(radius, radius - r);
+        int col = 0;
 
-        for (int q = qMin; q <= qMax; q++)
+        for (int q = -radius; q <= radius; q++)
         {
+            int doubleR = row - 2 * radius - q;
+            int r = doubleR / 2;
+
+            if (doubleR % 2 != 0 || distanceFromCenter(q, r) > radius)
+                continue;
+
             hex->q[i] = q;
             hex->r[i] = r;
-            hex->row[i] = r + radius;
-            hex->col[i] = q - qMin;
+            hex->row[i] = row;
+            hex->col[i] = col;
+            col++;
             i++;
         }
     }
