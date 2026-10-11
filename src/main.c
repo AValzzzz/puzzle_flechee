@@ -19,6 +19,14 @@ int main(int argc, char *argv[])
 
     printf("Seed: %u\n\n",seed);
     printBoard(&hex, board);
+    printf("\n");
+
+    Solution solution;
+    if (!solve(&hex, board, &solution)) {
+        printf("This board has no solution. \n");
+        return 1;
+    }
+    printSolution(&hex, &solution);
 
     return 0;
 }

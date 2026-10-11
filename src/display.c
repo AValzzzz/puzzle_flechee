@@ -41,3 +41,20 @@ void printBoard(const Hexagon *hex, const bool board[])
     }
     printf("\n");
 }
+
+static void printCellName(const Hexagon *hex, int cell)
+{
+    printf("row %d, cell %d", hex->row[cell] + 1, hex->col[cell] + 1);
+}
+
+void printSolution(const Hexagon *hex, const Solution *solution)
+{
+    printf("Solution in %d clicks:\n", solution->nbClicks);
+
+    for (int i = 0; i < solution->nbClicks; i++)
+    {
+        printf("  %2d. ", i + 1);
+        printCellName(hex, solution->clicks[i]);
+        printf("\n");
+    }
+}

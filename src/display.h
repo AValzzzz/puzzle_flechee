@@ -3,7 +3,9 @@
 
 #include <stdbool.h>
 #include "hexagon.h"
+#include "solver.h"
 
 void printBoard(const Hexagon *hex, const bool board[]);
+void printSolution(const Hexagon *hex, const Solution *solution);
 
 #endif
