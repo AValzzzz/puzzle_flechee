@@ -20,11 +20,3 @@ void click(const Hexagon *hex, bool board[], int cell)
         board[neighbor] = !board[neighbor];
     }
 }
-
-bool isSolved(const bool board[])
-{
-    for (int i = 0; i < NB_CELLS; i++)
-        if (!board[i])
-            return false;
-    return true;
-}

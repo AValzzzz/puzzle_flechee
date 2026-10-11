@@ -6,6 +6,5 @@
 
 void randomBoard(const Hexagon *hex, bool board[]);
 void click(const Hexagon *hex, bool board[], int cell);
-bool isSolved(const bool board[]);
 
 #endif
