@@ -1,25 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include "hexagon.h"
 #include "board.h"
+#include "input.h"
 #include "solver.h"
 #include "display.h"
 
-int main(int argc, char *argv[])
+static void generateBoard(const Hexagon *hex, bool board[], const char *seedArg)
 {
     unsigned int seed = time(NULL);
-    if (argc > 1)
-        seed = strtoul(argv[1], NULL, 10);
+    if (seedArg != NULL)
+        seed = strtoul(seedArg, NULL, 10);
     srand(seed);
 
+    randomBoard(hex, board);
+    printf("Seed: %u\n", seed);
+}
+
+int main(int argc, char *argv[])
+{
     Hexagon hex;
     initHexagon(&hex);
 
     bool board[NB_CELLS];
-    randomBoard(&hex, board);
+    if (argc > 1 && strcmp(argv[1], "--input") == 0)
+    {
+        if (!readBoard(&hex, board))
+        {
+            printf("\nIncomplete board.\n");
+            return 1;
+        }
+    }
+    else
+        generateBoard(&hex, board, argc > 1 ? argv[1] : NULL);
 
-    printf("Seed: %u\n\n",seed);
+    printf("\n");
     printBoard(&hex, board, NO_HIGHLIGHT);
     printf("\n");
 

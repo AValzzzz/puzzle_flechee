@@ -16,6 +16,9 @@ Start : a random generation with either spot having 1 or 2.
 make
 ./puzzle
 ./puzzle {seed}
+./puzzle --input
 ```
 
-Thr program prints the board, the list of cells to click (fewest clicks), then plays an animation in the terminal (the cell to click is highlighted)
+With `--input`, type the board from the real game row by row, from top to bottom (13 rows of 1 to 4 cells, e.g. `1 2 2`).
+
+The program prints the board, the list of cells to click (fewest clicks), then plays an animation in the terminal (the cell to click is highlighted)
