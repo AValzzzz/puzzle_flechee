@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "hexagon.h"
 #include "board.h"
+#include "solver.h"
 #include "display.h"
 
 int main(int argc, char *argv[])
@@ -18,7 +20,7 @@ int main(int argc, char *argv[])
     randomBoard(&hex, board);
 
     printf("Seed: %u\n\n",seed);
-    printBoard(&hex, board);
+    printBoard(&hex, board, NO_HIGHLIGHT);
     printf("\n");
 
     Solution solution;
@@ -27,6 +29,10 @@ int main(int argc, char *argv[])
         return 1;
     }
     printSolution(&hex, &solution);
+
+    printf("\nPress Enter to watch the animation...");
+    getchar();
+    animateSolution(&hex, board, &solution);
 
     return 0;
 }

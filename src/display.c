@@ -1,10 +1,19 @@
 #include <stdio.h>
+#include <unistd.h>
 #include "display.h"
+#include "board.h"
 
 #define CELL_WIDTH 4
+#define STEP_DELAY 1000000
+
 #define COLOR_RESET "\033[0m"
 #define COLOR_GREEN "\033[32m"
 #define COLOR_RED "\033[31m"
+#define COLOR_TARGET "\033[1;30;43m"
+
+static void clearScreen(void) {
+    printf("\033[2J\033[H");
+}
 
 static void printIndent(int row)
 {
@@ -15,17 +24,19 @@ static void printIndent(int row)
         printf(" ");
 }
 
-static void printCell(bool value)
+static void printCell(bool value, bool highlighted)
 {
     int number = value ? 1 : 2;
 
-    if (value)
+    if (highlighted)
+        printf(COLOR_TARGET "[%d]" COLOR_RESET " ", number);
+    else if (value)
         printf(COLOR_GREEN " %d " COLOR_RESET " ", number);
     else
         printf(COLOR_RED " %d " COLOR_RESET " ", number);
 }
 
-void printBoard(const Hexagon *hex, const bool board[])
+void printBoard(const Hexagon *hex, const bool board[], int highlighted)
 {
     for (int i = 0; i < NB_CELLS; i++)
     {
@@ -37,7 +48,7 @@ void printBoard(const Hexagon *hex, const bool board[])
                 printf("\n");
             printIndent(hex->row[i]);
         }
-        printCell(board[i]);
+        printCell(board[i], i == highlighted);
     }
     printf("\n");
 }
@@ -57,4 +68,24 @@ void printSolution(const Hexagon *hex, const Solution *solution)
         printCellName(hex, solution->clicks[i]);
         printf("\n");
     }
+}
+
+void animateSolution(const Hexagon *hex, bool board[], const Solution *solution) {
+    for (int i = 0 ; i < solution-> nbClicks; i++) {
+        int cell = solution->clicks[i];
+
+        clearScreen();
+        printf("Step %d/%d: click on ", i + 1, solution-> nbClicks);
+        printCellName(hex, cell);
+        printf("\n\n");
+        printBoard(hex, board, cell);
+        fflush(stdout);
+
+        usleep(STEP_DELAY);
+        click(hex, board, cell);
+    }
+
+    clearScreen();
+    printf("Solved in %d clicks!\n\n", solution->nbClicks);
+    printBoard(hex, board, NO_HIGHLIGHT);
 }

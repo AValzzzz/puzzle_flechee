@@ -5,7 +5,10 @@
 #include "hexagon.h"
 #include "solver.h"
 
-void printBoard(const Hexagon *hex, const bool board[]);
+#define NO_HIGHLIGHT (-1)
+
+void printBoard(const Hexagon *hex, const bool board[], int highlighted);
 void printSolution(const Hexagon *hex, const Solution *solution);
+void animateSolution(const Hexagon *hex, bool board[], const Solution *solution);
 
 #endif
