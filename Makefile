@@ -1,19 +1,22 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=gnu11 -O2
 
-SRC = $(wildcard src/*.c)
-OBJ = $(SRC:.c=.o)
+COMMON = src/hexagon.o src/board.o src/solver.o src/input.o
 EXEC = puzzle
+GUI = puzzle_gui
 
-all: $(EXEC)
+all: $(EXEC) $(GUI)
 
-$(EXEC): $(OBJ)
+$(EXEC): $(COMMON) src/main.o src/display.o
 	$(CC) $(CFLAGS) -o $@ $^
+
+$(GUI): $(COMMON) src/gui.o
+	$(CC) $(CFLAGS) -o $@ $^ -lraylib -lm
 
 src/%.o: src/%.c src/*.h
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm -rf $(OBJ) $(EXEC)
+	rm -rf src/*.o $(EXEC) $(GUI)
 
 .PHONY: all clean

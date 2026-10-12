@@ -1,6 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <ctype.h>
+#include <time.h>
 #include "input.h"
+#include "board.h"
 
 #define LINE_SIZE 256
 
@@ -44,7 +48,7 @@ static bool readRow(bool cells[], int row, int length)
     return false;
 }
 
-bool readBoard(const Hexagon *hex, bool board[])
+static bool readBoard(const Hexagon *hex, bool board[])
 {
     int cell = 0;
 
@@ -58,5 +62,31 @@ bool readBoard(const Hexagon *hex, bool board[])
             return false;
         cell += length;
     }
+    return true;
+}
+
+static void generateBoard(const Hexagon *hex, bool board[], const char *seedArg)
+{
+    unsigned int seed = time(NULL);
+    if (seedArg != NULL)
+        seed = strtoul(seedArg, NULL, 10);
+    srand(seed);
+
+    randomBoard(hex, board);
+    printf("Seed: %u\n", seed);
+}
+
+bool loadBoard(const Hexagon *hex, bool board[], int argc, char *argv[])
+{
+    if (argc > 1 && strcmp(argv[1], "--input") == 0)
+    {
+        if (!readBoard(hex, board))
+        {
+            printf("\nIncomplete board.\n");
+            return false;
+        }
+    }
+    else
+        generateBoard(hex, board, argc > 1 ? argv[1] : NULL);
     return true;
 }

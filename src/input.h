@@ -4,6 +4,6 @@
 #include <stdbool.h>
 #include "hexagon.h"
 
-bool readBoard(const Hexagon *hex, bool board[]);
+bool loadBoard(const Hexagon *hex, bool board[], int argc, char *argv[]);
 
 #endif

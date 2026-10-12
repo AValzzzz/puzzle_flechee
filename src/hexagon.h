@@ -5,6 +5,7 @@
 #define NB_ROWS (4 * SIDE - 3)
 #define NB_CELLS 37
 #define MAX_NEIGHBORS 6
+#define NO_HIGHLIGHT (-1)
 
 /*
  * The cells are numbered from 0 to 36, row by row, from top to bottom
